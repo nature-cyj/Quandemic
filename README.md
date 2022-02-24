@@ -3,13 +3,15 @@
 # Quandemic
 
 Contributors:
-@JongheumJung
-@YoonjaeChung
-@GyunghunKim
+[@JongheumJung](mailto://jungjh0330snu@snu.ac.kr),
+[@YoonjaeChung](https://github.com/nature-cyj),
+[@GyunghunKim](https://github.com/GyunghunKim) 
 
 </div>
 
 ## Abstract
+
+> ***TODO***
 
 ## The Quandemic
 
@@ -19,7 +21,7 @@ Contributors:
 ### Contents
 
 - Citizens<br>
-A quantum circuit with 9 qubits represents a city that 9 citizens live with a deadly virus.
+A quantum circuit with N by M qubits represents a city that N\*M citizens live with a deadly virus.
 0's and 1's appearing on the computational basis of this system corresponds to healthy and infected
 states, respectively.
 Since the people live in a quantum world, the city stays in a superposition of possible infection
@@ -36,18 +38,26 @@ For sake of the player, one can measure states of all qubits at once for only on
 game. It will remove superposition of the city's state, but the state will quickly branch and
 involve possibilities as time goes on.
 
-- The rotational hospital<br>
-There are two hospitals in this city. First is the rotational hospital.
+- The aitch(H) hospital<br>
+There are two hospitals in this city. 
 
-- The Pauli's X hospital
-- Interaction between two citizens
+- The Pauli's X hospital<br>
+
+
+- Interaction between two citizens<br>
+
+
+- The last, mandatory PCR test<br>
+This test decides whether your critical choices during the pandemic were successful or not. This
+very final operation measures all qubits of the system as the total survey. Even if a single **1**
+exists in your final state, it will move, copy itself and spread throughout your city again. No way!
+The game's objective is to obtain the result |00...00> and to free your city from the pandemic
+forever! 
 
 ### Rules
 - 
-- 
-- 
-- 
-
 
 
 ### Tips
+- 
+

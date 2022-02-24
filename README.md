@@ -3,8 +3,8 @@
 # Quandemic
 
 Contributors:
-@JungheumJung
-@YunjaeJung
+@JongheumJung
+@YoonjaeChung
 @GyunghunKim
 
 </div>

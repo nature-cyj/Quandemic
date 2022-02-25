@@ -96,3 +96,6 @@ exists in your final state, it will move, copy itself and spread throughout your
 The game's objective is to obtain the result |00...00> and to free your city from the pandemic
 forever! 
 Input : write 1(0) if you want(do not want) to do the action. ex) 1
+
+![Title_Image](./GUI_Sample.png)
+It is the interim state of the 'GUI' version game. #0 person visited the 'H' hospital. By the way, we had inspected the PCR test for the #2 person, and his/her result was positive.

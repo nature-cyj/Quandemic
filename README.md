@@ -97,5 +97,8 @@ The game's objective is to obtain the result |00...00> and to free your city fro
 forever! 
 Input : write 1(0) if you want(do not want) to do the action. ex) 1
 
+<div align='center'>
 ![Title_Image](./GUI_Sample.png)
+
+- **Example of the 'GUI' version**<br>
 It is the interim state of the 'GUI' version game. #0 person visited the 'H' hospital. By the way, we had inspected the PCR test for the #2 person, and his/her result was positive.

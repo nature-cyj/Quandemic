@@ -108,8 +108,8 @@ Input : write 1(0) if you want(do not want) to do the action. ex) 1
 
 We first select pairs of citizen to swap position, indicated as blue edges. Then, select which citizens to 
 send hospital, indicated as light-red boxes. Press 'Next' button to progress to next step. We can either check 
-one person's PCR testing result, or use the total PCR inspection chance for once.
-Execute GUI version of the game by typing ``` python3 GUI_Quandemics.py ``` to the command.
+one person's PCR testing result, or use the total PCR inspection chance (limited to once per game).
+Execute GUI version of the game by ``` python3 GUI_Quandemics.py ```.
 
 ### Captured Scene
 - **Example of the 'GUI' version**<br>

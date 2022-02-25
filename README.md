@@ -33,12 +33,12 @@ of the citizens is always pure state. All the actions are unitary. On the other 
 the latter one, the state of the citizens can be mixed state. Considering a density matrix will be a 
 good strategy. Most of actions are unitary, however, swapping two citiznes lead to non-unitary evolution.
 More details are described at 'Regular Action: Move Citizens (Swap)'.
--Input : write 1(0) if you want to play 'Mixed Quandemic'('Pure Quandemic'). ex) 1
+Input : write 1(0) if you want to play 'Mixed Quandemic'('Pure Quandemic'). ex) 1
 
 - **Level**<br>
 The level indicates the initial number of infected people. However, indices of infected people are selected
 randomly. 
--Input : write the number of level. ex) 3
+Input : write the number of level. ex) 3
 
 - **Citizens**<br>
 A quantum circuit with N by M qubits represents a city that N\*M citizens live with a deadly virus.
@@ -51,13 +51,13 @@ A PCR test corresponds to measurement on a specific qubit, or a citizen of this 
 obtains a decisive result about the citizen's infection status, the test destroys possibility of the
 city to be in states which counter the test result. In quantum-like words, the measurement projects
 previous state into a subspace contains the measured result.
--Input : write the index of person you want to inspect. ex) 4
+Input : write the index of person you want to inspect. ex) 4
 
 - **Special Action: PCR Testing (Total Inspection)**<br>
 For sake of the player, one can measure states of all qubits at once for only one time during the
 game. It will remove superposition of the city's state, but the state will quickly branch and
 involve possibilities as time goes on.
--Input : write 1(0) if you want(do not want) to do the action. ex) 1
+Input : write 1(0) if you want(do not want) to do the action. ex) 1
 
 - **Regular Action: Move Citizens (Swap)**<br>
 In each turn, player should choose pairs of citizens to swap position. However, when a player use 
@@ -66,7 +66,7 @@ to the contaminated environment while swapping each other. The newly possible in
 state is involved to the game as superposition.  Simply, a quantum **SWAP** gate and a Kraus
 operator(only for 'Mixed Quandemic' mode) which puts 0 to 1 at a fixed possibility successively applied 
 for each pair of citizens that the player selected. Players are allowed to swap 'neighboring' citizens only. 
--Input : write the pairs of people's indices for inspection. If you want to inspect (0,1) and (3,4) --> ex) 0,1 3,4
+Input : write the pairs of people's indices for inspection. If you want to inspect (0,1) and (3,4) --> ex) 0,1 3,4
 
 - **Regular Action: Send Hospital**<br>
 There are two hospitals in this city placed at the certain area.<br>
@@ -83,7 +83,7 @@ There are two hospitals in this city placed at the certain area.<br>
     healthy one at the same time! This hospital has the perfect medicine, but it is located at the 
     center of the city.. It is really easy to get infected via passing through the central city.
     
--Input : write the indices of people who wants to go to the hospital. ex) 0 1 3
+Input : write the indices of people who wants to go to the hospital. ex) 0 1 3
     
 In each turn, the player should select which citizens to send hospital. It is only possible to send
 citizens that are placed on the hostpial area.
@@ -95,4 +95,4 @@ very final operation measures all qubits of the system as the total survey. Even
 exists in your final state, it will move, copy itself and spread throughout your city again. No way!
 The game's objective is to obtain the result |00...00> and to free your city from the pandemic
 forever! 
--Input : write 1(0) if you want(do not want) to do the action. ex) 1
+Input : write 1(0) if you want(do not want) to do the action. ex) 1

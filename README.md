@@ -98,6 +98,7 @@ forever!
 Input : write 1(0) if you want(do not want) to do the action. ex) 1
 
 <div align='center'>
+  
 ![Title_Image](./GUI_Sample.png)
 
 </div>  

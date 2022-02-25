@@ -1,3 +1,5 @@
+# tkinter game templete
+# https://github.com/aqeelanwar/Dots-and-Boxes
 from tkinter import *
 from tkinter.ttk import * 
 
@@ -39,7 +41,7 @@ class Quandemic():
         self.ini_result = self.game(nx_qubits,ny_qubits,level,self.ini_bool)
         self.progress = True
         self.can_total_survey = True
-        self.game_card = {}
+        self.game_card = {'hospital':[], 'SWAP':[]}
         
         self.can_select_swap = True
         self.can_select_hospital = False
@@ -51,7 +53,7 @@ class Quandemic():
         self.st.configure('W.TButton', background='#345', foreground='black', font=('Arial', 10 ))
         
         self.btn_pcr_all = Button(self.window, text='PCR Total Inspect',style='W.TButton',
-                          command=None) # self.display_pcr_total_result([1, 0, 1, 0, 1, 1, 0, 1, 1])
+                          command=self.on_btn_pcr_all_click) # self.display_pcr_total_result([1, 0, 1, 0, 1, 1, 0, 1, 1])
         self.btn_pcr_all.place(x=6.0*size_of_board/8, y=7)
         
         self.btn_pcr = Button(self.window, text='PCR 1p',style='W.TButton',
@@ -69,7 +71,8 @@ class Quandemic():
     def play_again(self):
         self.refresh_board()
         self.board_status = np.zeros(shape=(number_of_dots - 1, number_of_dots - 1))
-        self.box_status = np.zeros(shape=(number_of_dots - 1, number_of_dots - 1))
+        self.box_status = np.zeros(shape=(number_of_dots - 1, number_of_dots - 1))  # hospital select
+        self.box_status2 = np.zeros(shape=(number_of_dots - 1, number_of_dots - 1)) # pcr one select
         self.row_status = np.zeros(shape=(number_of_dots, number_of_dots - 1))
         self.col_status = np.zeros(shape=(number_of_dots - 1, number_of_dots))
         
@@ -87,9 +90,11 @@ class Quandemic():
         self.turntext_handle2 = []
         self.pcr_result_text_handle = []
         self.line_handle = []
+        self.box1_handle = []
+        self.box2_handle = []
 
         self.already_marked_boxes = []
-        self.display_turn_text()
+        #self.display_turn_text()
         self.display_guide_text("Select pairs to swap and click next")
         #self.display_guide_text("Quandemic: Save the City!")
             
@@ -102,7 +107,7 @@ class Quandemic():
     # Quandemic Core
     def game(self,nx_qubits,ny_qubits,level,ini,state=[],game_card={}):
         if ini==-1:
-            dev1 = qml.device("default.qubit",wires=range(nx_qubits*ny_qubits))
+            dev1 = qml.device("default.qubit",wires=np.array(range(nx_qubits*ny_qubits)))
             @qml.qnode(dev1)
             def ini_circuit():
                 n_total = nx_qubits*ny_qubits
@@ -112,12 +117,12 @@ class Quandemic():
                 return qml.state()
             return ini_circuit()
         elif ini==-2: 
-            dev2 = qml.device("default.qubit",wires=range(nx_qubits*ny_qubits))
+            dev2 = qml.device("default.qubit",wires=np.array(range(nx_qubits*ny_qubits)))
             @qml.qnode(dev2)
             def intermediate_circuit():
-                qml.AmplitudeEmbedding(state, wires=range(nx_qubits*ny_qubits))
+                qml.AmplitudeEmbedding(state, wires=np.array(range(nx_qubits*ny_qubits)))
                 for swap in game_card['SWAP']:
-                    qml.SWAP(wires=list(map(int,swap.split(','))))
+                    qml.SWAP(wires=swap)
                 for hospital in game_card['hospital']:
                     if int(hospital) == (nx_qubits*ny_qubits-1)/2:
                         print("Welcome to the most dangerous, but efficacious hospital.")
@@ -133,10 +138,10 @@ class Quandemic():
                 return qml.state()
             return intermediate_circuit()
         elif ini == -3:
-            dev3 = qml.device("default.qubit",shots=1,wires=range(nx_qubits*ny_qubits))
+            dev3 = qml.device("default.qubit",shots=1,wires=np.array(range(nx_qubits*ny_qubits)))
             @qml.qnode(dev3)
             def end_circuit():
-                qml.AmplitudeEmbedding(state, wires=range(nx_qubits*ny_qubits))
+                qml.AmplitudeEmbedding(state, wires=np.array(range(nx_qubits*ny_qubits)))
                 return qml.sample()
             final_pcr = end_circuit()
             if 1 not in final_pcr:
@@ -144,26 +149,26 @@ class Quandemic():
             else:
                 return 'Virus is not disappeared. YOU LOSE'
         elif ini == -4:
-            dev6 = qml.device("default.qubit",shots=1,wires=range(nx_qubits*ny_qubits))
+            dev6 = qml.device("default.qubit",shots=1,wires=np.array(range(nx_qubits*ny_qubits)))
             @qml.qnode(dev6)
             def total_survey_circuit():
-                qml.AmplitudeEmbedding(state, wires=range(nx_qubits*ny_qubits))
+                qml.AmplitudeEmbedding(state, wires=np.array(range(nx_qubits*ny_qubits)))
                 return qml.sample()
-            dev7 = qml.device("default.qubit",wires=range(nx_qubits*ny_qubits))
+            dev7 = qml.device("default.qubit",wires=np.array(range(nx_qubits*ny_qubits)))
             @qml.qnode(dev7)
             def after_survey(total_survey):
                 print("The entire PCR test result is:",total_survey)
                 self.display_pcr_total_result(total_survey)
-                qml.BasisState(total_survey, wires=range(nx_qubits*ny_qubits))
+                qml.BasisState(total_survey, wires=np.array(range(nx_qubits*ny_qubits)))
                 return qml.state()
             return after_survey(total_survey_circuit())
         else:
-            dev4 = qml.device("default.qubit",shots=1,wires=range(nx_qubits*ny_qubits))
+            dev4 = qml.device("default.qubit",shots=1,wires=np.array(range(nx_qubits*ny_qubits)))
             @qml.qnode(dev4)
             def measure_circuit(issample):
-                qml.AmplitudeEmbedding(state, wires=range(nx_qubits*ny_qubits))
+                qml.AmplitudeEmbedding(state, wires=np.array(range(nx_qubits*ny_qubits)))
                 if issample:
-                    return qml.sample(wires=ini)
+                    return qml.sample(wires=np.array([ini]))
                 else:
                     return qml.state()
             measure_out = measure_circuit(True)
@@ -173,6 +178,10 @@ class Quandemic():
             else:
                 print("The PCR test of person ",ini," is ","Negative.")
                 self.display_result_text("The PCR test of person {} is Negative.".format(ini))
+            
+            self.clear_edge()
+            self.can_select_pcr_one = False
+            self.can_select_swap = True
             states = measure_circuit(False)
             aft_meas = []
             j =nx_qubits*ny_qubits - 1 - ini
@@ -182,10 +191,10 @@ class Quandemic():
                     aft_meas.append(st)
                 else :
                     aft_meas.append(0)
-            dev5 = qml.device("default.qubit",wires=range(nx_qubits*ny_qubits))
+            dev5 = qml.device("default.qubit",wires=np.array(range(nx_qubits*ny_qubits)))
             @qml.qnode(dev5)
             def re_input_circuit():
-                qml.AmplitudeEmbedding(aft_meas, wires=range(nx_qubits*ny_qubits),normalize=True)
+                qml.AmplitudeEmbedding(aft_meas, wires=np.array(range(nx_qubits*ny_qubits)), normalize=True)
                 return qml.state()
             return re_input_circuit()    
         
@@ -228,8 +237,10 @@ class Quandemic():
 
     def convert_grid_to_logical_position_box(self, grid_position):
         grid_position = np.array(grid_position)
-        grid_position -= distance_between_dots/4
-        return np.array(grid_position // distance_between_dots, dtype=int)
+        grid_position = grid_position.astype('float32')
+        grid_position -= distance_between_dots/2
+        print(grid_position // (distance_between_dots))
+        return np.array(grid_position // (distance_between_dots), dtype=int)
     
     def mark_box(self):
         boxes = np.argwhere(self.board_status == -4)
@@ -237,14 +248,14 @@ class Quandemic():
             if list(box) not in self.already_marked_boxes and list(box) !=[]:
                 self.already_marked_boxes.append(list(box))
                 color = player1_color_light
-                self.shade_box(box, color)
+                #self.shade_box(box, color)
 
         boxes = np.argwhere(self.board_status == 4)
         for box in boxes:
             if list(box) not in self.already_marked_boxes and list(box) !=[]:
                 self.already_marked_boxes.append(list(box))
                 color = player2_color_light
-                self.shade_box(box, color)
+                #self.shade_box(box, color)
 
     def update_board(self, type, logical_position):
         r = logical_position[0]
@@ -293,8 +304,10 @@ class Quandemic():
         self.line_handle.append(self.canvas.create_line(start_x, start_y, end_x, end_y, fill=color, width=edge_width))
         
     def clear_edge(self):
+        
         for line in self.line_handle:
             self.canvas.delete(line)
+        #self.canvas.delete("all")
 
     def display_gameover(self):
         player1_score = len(np.argwhere(self.board_status == -4))
@@ -395,21 +408,59 @@ class Quandemic():
         start_y = distance_between_dots / 2 + box[0] * distance_between_dots + edge_width/2
         end_x = start_x + distance_between_dots - edge_width
         end_y = start_y + distance_between_dots - edge_width
-        self.canvas.create_rectangle(start_x, start_y, end_x, end_y, fill=color, outline='')
+        self.box1_handle.append(self.canvas.create_rectangle(start_x, start_y, end_x, end_y, fill=color, outline=''))
 
     
     def click(self, event): 
         ''' Use this function as main loop'''
+        print([event.x, event.y])
+        if event.x < 100 and event.y < 30:
+            print('skipped')
+            return None # skip the area where button is placed
+        
+        if event.x > 415 and event.y < 60:
+            print('skipped')
+            return None # skip the area where button is placed
+ 
+        '''if self.can_select_pcr_one:
+            print("click: can_select_pcr")
+            self.display_guide_text("Who wants to get pcr?")
+            #self.ini_bool = int(input("Who wants to get pcr?:")) # ini_bool for index of person who gets PCR test
+            return None'''
+        if self.can_select_pcr_one:
+            print("click: can_select_pcr_one")
+            self.can_select_swap = False
+            grid_position = [event.y, event.x]
+            logical_position = self.convert_grid_to_logical_position_box(grid_position)
+            print(logical_position)
+            self.shade_box(logical_position, player1_color_light)
+            self.display_guide_text("Waiting for PCR Result...Press Next")
+            self.ini_bool = logical_position[0]*3 + logical_position[1]
+            return None
+    
+    
+        if self.can_select_hospital:
+            print("click: can_select_hospital")
+            self.can_select_swap = False
+            grid_position = [event.y, event.x]
+            logical_position = self.convert_grid_to_logical_position_box(grid_position)
+            print(logical_position)
+            self.shade_box(logical_position, player2_color_light)
+            self.display_guide_text("Select the hospitals and click next")
+            self.game_card['hospital'].append(logical_position[0]*3 + logical_position[1])
+            print(self.game_card)
+            return None
         
         if self.can_select_swap:
+            print("click: can_select_swap")
             self.display_guide_text("Select pairs to swap and click next")
         
             grid_position = [event.x, event.y]
-            logical_positon, valid_input = self.convert_grid_to_logical_position(grid_position)
-            if valid_input and not self.is_grid_occupied(logical_positon, valid_input):
-                self.update_board(valid_input, logical_positon)
-                self.make_edge(valid_input, logical_positon)
-                #self.mark_box()
+            logical_position, valid_input = self.convert_grid_to_logical_position(grid_position)
+            if valid_input and not self.is_grid_occupied(logical_position, valid_input):
+                self.update_board(valid_input, logical_position)
+                self.make_edge(valid_input, logical_position)
+                self.mark_box()
                 self.refresh_board()
                 # self.player1_turn = not self.player1_turn  # change turn
 
@@ -419,14 +470,8 @@ class Quandemic():
                 else:
                     self.display_guide_text("Select pairs to swap and click next")
                     #self.display_pcr_total_result([1, 0, 1, 0, 1, 1, 0, 1, 1])
+            return None
         
-        if self.can_select_hospital:
-            self.can_select_swap = False
-            grid_position = [event.x, event.y]
-            logical_positon = self.convert_grid_to_logical_position_box(grid_position)
-            self.shade_box(logical_positon)
-            self.display_guide_text("Select the hospitals and click next")
-            self.game_card['hospital'] = list(map(int,input("select the hospitals:").split()))
         
         '''
         else:
@@ -434,8 +479,17 @@ class Quandemic():
             self.play_again()
             self.reset_board = False'''
 
-
+    def clear_turn(self):
+        self.board_status = np.zeros(shape=(number_of_dots - 1, number_of_dots - 1))
+        self.box_status = np.zeros(shape=(number_of_dots - 1, number_of_dots - 1))  # hospital select
+        self.box_status2 = np.zeros(shape=(number_of_dots - 1, number_of_dots - 1)) # pcr one select
+        self.game_card = {'hospital':[], 'SWAP':[]}
+        for box in self.box1_handle:
+            self.canvas.delete(box)
+        self.clear_edge()
+        
     def on_btn_next_click(self):
+        print('next')
         def row_edge_to_pair(coord):
             if np.array_equal(coord, np.array([1,0])): return [0,3]
             elif np.array_equal(coord, np.array([1,1])): return [1,4]
@@ -454,29 +508,55 @@ class Quandemic():
 
         if self.can_select_pcr_one:
             self.display_guide_text("Who wants to get pcr?")
-            self.ini_bool = int(input("Who wants to get pcr?:")) # ini_bool for index of person who gets PCR test
+            #self.ini_bool = int(input("Who wants to get pcr?:")) # ini_bool for index of person who gets PCR test
+            print(self.ini_bool)
             self.ini_result = self.game(nx_qubits,ny_qubits,level,self.ini_bool,self.ini_result)
-            self.clear_edge()
+            self.clear_turn
+            self.can_select_pcr_one = False
+            self.can_select_hospital = False
+            self.can_select_swap = True
+            self.display_guide_text("Select pairs to swap and click next")
+            return None
             
         if self.can_select_hospital:
+            print('Next: can_select_hospital')
             self.clear_edge()
             self.display_guide_text("Select the hospitals and click next")
             self.ini_bool = -2
             self.ini_result = self.game(nx_qubits,ny_qubits,level,self.ini_bool,self.ini_result,self.game_card)
             self.can_select_hospital = False
             self.can_select_pcr_one = True
+            self.can_select_swap = False
+            self.display_guide_text("Who wants to get pcr?")
+            return None
             
         if self.can_select_swap:
             swaps_r = np.argwhere(self.row_status == 1)
             swaps_c = np.argwhere(self.col_status == 1)
-            self.game_card['SWAP'] = np.concatenate((swaps_r, swaps_c))
+            for coord in swaps_r:
+                swap = row_edge_to_pair(coord)
+                self.game_card['SWAP'].append(swap)          
+            for coord in swaps_c:
+                swap = col_edge_to_pair(coord)
+                self.game_card['SWAP'].append(swap)
             self.can_select_swap = False
             self.can_select_hospital = True
+            self.can_select_pcr_one = False
+            self.display_guide_text("Select the hospitals and click next")
+            return None
                                          
         return None
     
     def on_btn_pcr_click(self):
-        return None
+        if not self.can_select_pcr_one:
+            self.display_result_text("Cannot get PCR testing yet")
+        else:
+            self.display_guide_text("Who wants to get pcr?")
+            self.ini_result = self.game(nx_qubits,ny_qubits,level,self.ini_bool,self.ini_result)
+            self.clear_edge()
+            self.can_select_pcr_one = False
+            self.can_select_swap = True
+                        
     
     def on_btn_pcr_all_click(self):
         if self.pcr_total_left == 0:

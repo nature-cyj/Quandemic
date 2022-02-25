@@ -97,6 +97,9 @@ The game's objective is to obtain the result |00...00> and to free your city fro
 forever! 
 Input : write 1(0) if you want(do not want) to do the action. ex) 1
 
+
+### Picture
+
 <div align='center'>
   
 ![Title_Image](./GUI_Sample.png)

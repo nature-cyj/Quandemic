@@ -54,9 +54,9 @@ There are two hospitals in this city placed at the certain area.<br>
   - **The Pauli's X hospital**<br>
     The Pauli's X hospital is placed at the center of the city.
     
-In each turn, the player should select which citizens to send hospital. It is only possible to send citizens that 
-are placed on the hostpial area. For example, in 3x3 city, selecting 0, 4, 6 are valid action, while selecting 
-0, 1, 8 is invalid because there is no hospital at position 0.
+  In each turn, the player should select which citizens to send hospital. It is only possible to send citizens that 
+  are placed on the hostpial area. For example, in 3x3 city, selecting 0, 4, 6 are valid action, while selecting 
+  0, 1, 8 is invalid because there is no hospital at position 0.
 
 
 - **The last, mandatory PCR test**<br>

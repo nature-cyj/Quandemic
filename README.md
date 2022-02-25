@@ -27,6 +27,13 @@ Predict, act, and measure!
 
 ### Contents
 
+- **Mode**<br>
+In this game, there are two modes: Pure Quandemic and Mixed Quandemic. From the former one, the state
+of the citizens is always pure state. All the actions are unitary. On the other hand, when using 
+the latter one, the state of the citizens can be mixed state. Considering a density matrix will be a 
+good strategy. Most of actions are unitary, however, swapping two citiznes lead to non-unitary evolution.
+More details are described at 'Regular Action: Move Citizens (Swap)'.
+
 - **Citizens**<br>
 A quantum circuit with N by M qubits represents a city that N\*M citizens live with a deadly virus.
 0's and 1's appearing on the computational basis of this system corresponds to healthy and infected
@@ -45,28 +52,29 @@ game. It will remove superposition of the city's state, but the state will quick
 involve possibilities as time goes on.
 
 - **Regular Action: Move Citizens (Swap)**<br>
-In each turn, player should choose pairs of citizens to swap position. However, since the swapped
-citizens interact each other, they might additionally catch the virus. The newly possible infected
+In each turn, player should choose pairs of citizens to swap position. However, when a player use 
+'Mixed Quandemice' mode, they might additionally catch the virus since the swapped citizens can be exposed 
+to the contaminated environment while swapping each other. The newly possible infected
 state is involved to the game as superposition.  Simply, a quantum **SWAP** gate and a Kraus
-operator which puts 0 to 1 at a fixed possibility successively applied for each pair of citizens
-that the player selected. Players are allowed to swap 'neighboring' citizens only. 
+operator(only for 'Mixed Quandemic' mode) which puts 0 to 1 at a fixed possibility successively applied 
+for each pair of citizens that the player selected. Players are allowed to swap 'neighboring' citizens only. 
 
 - **Regular Action: Send Hospital**<br>
 There are two hospitals in this city placed at the certain area.<br>
   - **The 'H' hospital**<br>
-    The 'H' hospital is placed in every corner of the city. For example, in 3x3 city, 'H' hospital
-    is placed at position 0, 2, 6, 8. The 'H' hospital works by applying Hadamard gate if player
-    selects its position.  Be careful that it might increase probability of infection if it is used
-    in a wrong way!
+    The 'H' hospital is placed on boundaries of the city. For example, in 3x3 city, 'H' hospital
+    is placed at position 0, 1, 2, 3, 5, 6, 7, 8. The 'H' hospital works by applying Hadamard gate 
+    if player selects its position.  Be careful that it might increase probability of infection 
+    if it is used in a wrong way!
     
   - **The Pauli's X hospital**<br>
     The Pauli's X hospital is placed at the center of the city. It acts to the citizen at the center
     by applying X gate. So the hospital will cure a citizen if one is infected, but it will infect a
-    healthy one at the same time!
+    healthy one at the same time! This hospital has the perfect medicine, but it is located at the 
+    center of the city.. It is really easy to get infected via passing through the central city.
     
 In each turn, the player should select which citizens to send hospital. It is only possible to send
-citizens that are placed on the hostpial area. For example, in 3x3 city, selecting 0, 4, 6 are valid
-action, while selecting 1, 8 is invalid because there is no hospital at position 1.
+citizens that are placed on the hostpial area.
 
 
 - **The last, mandatory PCR test**<br>

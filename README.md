@@ -98,13 +98,20 @@ forever!
 Input : write 1(0) if you want(do not want) to do the action. ex) 1
 
 
-### Picture
+### Demonstration
+
+<div align='center'>
+  
+![Title_Image](./Quandemic_demo.gif)
+
+</div>  
+
+### Captured Scene
+- **Example of the 'GUI' version**<br>
 
 <div align='center'>
   
 ![Title_Image](./GUI_Sample.png)
-
-</div>  
-
-- **Example of the 'GUI' version**<br>
+  
+</div>
 It is the interim state of the 'GUI' version game. #0 person visited the 'H' hospital. By the way, we had inspected the PCR test for the #2 person, and his/her result was positive.
